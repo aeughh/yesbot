@@ -6,30 +6,30 @@ module.exports = {
     .setDescription('Useful - Pins a specified message to #pining-for-the-fjords')
     .addStringOption(option => option.setName('messagelink').setDescription('Link of message that you want to pin').setRequired(true)),
   async execute(interaction) {
-    const messageLink = interaction.options.getString('messagelink');
-
-    const messageID = messageLink.split('/')[messageLink.split('/').length - 1];
-    const messageContent = msg.messages.fetch(messageID);
-// 'https://discord.com/channels/928074274500132865/1096585622115844126/1096617360623927377'
-    
-    const pinnedMessageEmbed = new EmbedBuilder()
-      .setColor(0xff6600)
-      .setURL('https://youtube.com'/*messageLink*/)
-      .setAuthor({ name: 'garmiriono', iconURL: 'https://media.discordapp.net/attachments/928074275158654978/1096492485804556379/ContactPhotoRetouching-IMG_20230331_130651.jpg?width=609&height=609', url: 'https://aeughh.github.io' })
-      .setDescription(messageContent)
-      .setFooter({ text: 'time' });
+    var globalVariables = {}; // Globally scoped object, might bring pain later on but fuck it
 
     const pinsChannel = interaction.client.channels.cache.get('1071724163510845440');
-    pinsChannel.send({ embeds: [pinnedMessageEmbed] });
+
+    globalVariables.messageLink = interaction.options.getString('messagelink');
+    globalVariables.messageID = globalVariables.messageLink.split('/')[globalVariables.messageLink.split('/').length - 1];
+    globalVariables.messageContent = 'placeholder, if you see this i fucked up';
+
+    // Fetches the message information from the specified ID and puts it into variables
+    interaction.channel.messages.fetch(globalVariables.messageID).then(message => {
+      globalVariables.messageContent = message.content;
+      // globalVariables.messageUser = message.user;
+      // globalVariables.messageContent = message.author;
+
+      var pinnedMessageEmbed = new EmbedBuilder()
+        .setColor(0xff6600)
+        .setAuthor({ name: `${message.author.username}`, iconURL: `${message.author.displayAvatarURL()}`, url: globalVariables.messageLink })
+        .setDescription(globalVariables.messageContent)
+        // .setFooter({ text: `<t:${message.createdTimestamp}:F>`});
+        .setTimestamp(message.createdTimestamp);
+
+      pinsChannel.send({ embeds: [pinnedMessageEmbed] });
+    }).catch(console.error);
+
     await interaction.reply(`${interaction.user} pinned a message to #pining-for-the-fjords`);
   }
-    // if (amount < 1 || amount > 99) {
-    //   return interaction.reply({ content: 'You need to input a number between 1 and 99.', ephemeral: true });
-    // }
-    // await interaction.channel.bulkDelete(amount, true).catch(error => {
-    //   console.error(error);
-    //   interaction.reply({ content: 'There was an error trying to prune messages in this channel!', ephemeral: true });
-    // });
-
-    // return interaction.reply({ content: `Successfully pruned \`${amount}\` messages.`, ephemeral: true });
 };

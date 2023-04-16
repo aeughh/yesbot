@@ -1,9 +1,17 @@
 // Initialization
+
 const fs = require('node:fs');
 const path = require('node:path');
-const { Client, Collection, Events, GatewayIntentBits, ActivityType } = require('discord.js');
+const { Client, Collection, Events, GatewayIntentBits, Partials, ActivityType } = require('discord.js');
 // const { } = require('./config.json');
-const client = new Client({ intents: [GatewayIntentBits.Guilds] });
+const client = new Client({
+  intents: [
+    GatewayIntentBits.DirectMessages,
+    GatewayIntentBits.Guilds,
+    GatewayIntentBits.GuildMessages,
+    GatewayIntentBits.MessageContent,
+  ],
+});
 
 // Command Registration
 client.commands = new Collection();
@@ -28,20 +36,27 @@ for (const folder of commandFolders) {
 let activities = [`nothing`, `something, probably`, `you, because you just got played`]
 i = 0;
 var catbruh;
+var baldReactOn = true;
 var luckybaldbazooka;
 
 // Log In
 client.once(Events.ClientReady, () => {
   console.log(`YesBot has logged in as ${client.user.tag} with absolutely no errors whatsoever.`);
-  client.user.setPresence({
-    status: "online",
-    activity: {
-      name: "To Your Mother",
-      type: "Listening"
-    }
+  client.user.setActivity({
+    name: `${activities[randomIntFromInterval(0, activities.length - 1)]}`,
+    type: ActivityType.Playing
   });
 });
-//activities[randomIntFromInterval(0, activities.length)]
+
+client.on("messageCreate", async message => {
+    const data = fs.readFileSync('./config.json', 'utf8')
+      var content = JSON.parse(data);
+      var br = content.br;
+      if(br == true){
+          message.react('928093438312857621');
+        }
+      
+  });
 
 // Get Interactions
 client.on(Events.InteractionCreate, async interaction => {

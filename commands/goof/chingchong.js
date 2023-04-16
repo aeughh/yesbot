@@ -3,7 +3,7 @@ const { SlashCommandBuilder } = require('discord.js');
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('chingchong')
-    .setDescription('Simple - for ethan'),
+    .setDescription('Goof - for ethan'),
   async execute(interaction) {
     let phrases = [
       'let it ching\, let it chong',
@@ -14,7 +14,7 @@ module.exports = {
       'i tried so ching and got so chong, but in the end it doesnt even chingchong'
     ]
 
-    await interaction.reply(phrases[randomIntFromInterval(0, phrases.length)]);
+    await interaction.reply(phrases[randomIntFromInterval(0, phrases.length - 1)]);
   },
 };
 
