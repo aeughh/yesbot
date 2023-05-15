@@ -17,17 +17,30 @@ module.exports = {
     // Fetches the message information from the specified ID and puts it into variables
     interaction.channel.messages.fetch(globalVariables.messageID).then(message => {
       globalVariables.messageContent = message.content;
+ /*  */     globalVariables.messageAttachments = message.attachments;
       // globalVariables.messageUser = message.user;
       // globalVariables.messageContent = message.author;
+      console.log(globalVariables.messageAttachments);
+      // if (globalVariables.messageAttachments != null) {
+      //   var pinnedMessageEmbed = new EmbedBuilder()
+      //     .setColor(0xff6600)
+      //     .setAuthor({ name: `${message.author.username}`, iconURL: `${message.author.displayAvatarURL()}`, url: globalVariables.messageLink })
+      //     .setDescription(`Click to see attachments (temporary until I add attachments to the pin command)`)
+      //     .setTimestamp(message.createdTimestamp);
+      // } else {
+      //   var pinnedMessageEmbed = new EmbedBuilder()
+      //     .setColor(0xff6600)
+      //     .setAuthor({ name: `${message.author.username}`, iconURL: `${message.author.displayAvatarURL()}`, url: globalVariables.messageLink })
+      //     .setDescription(globalVariables.messageContent)
+      //     .setTimestamp(message.createdTimestamp);
+      // }
 
-      var pinnedMessageEmbed = new EmbedBuilder()
-        .setColor(0xff6600)
-        .setAuthor({ name: `${message.author.username}`, iconURL: `${message.author.displayAvatarURL()}`, url: globalVariables.messageLink })
-        .setDescription(globalVariables.messageContent)
-        // .setFooter({ text: `<t:${message.createdTimestamp}:F>`});
-        .setTimestamp(message.createdTimestamp);
+      // FIGURE OUT HOW TO READ 'Collection(0) [Map] {}' What the fuck does this mean
+      // if (array === undefined || array.length == 0) {
+      //   // array does not exist or is empty
+      //   }
 
-      pinsChannel.send({ embeds: [pinnedMessageEmbed] });
+      // pinsChannel.send({ embeds: [pinnedMessageEmbed] });
     }).catch(console.error);
 
     await interaction.reply(`${interaction.user} pinned a message to #pining-for-the-fjords`);

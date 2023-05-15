@@ -4,15 +4,19 @@ module.exports = {
   data: new SlashCommandBuilder()
     .setName('story')
     .setDescription('Goof - tells a story')
-  	.addStringOption(option =>
-		option.setName('story')
-			.setDescription('The story to choose')
-			.setRequired(false)
-			.addChoices(
-				{ name: 'Evan', value: 'evan' },
-				{ name: 'Zolbow', value: 'zolbow' },
-				{ name: 'You', value: 'you' },
-			));
+    .addStringOption(option =>
+      option.setName('story')
+        .setDescription('The story to choose')
+        .setRequired(false)
+        .setAutocomplete(true)),
+  // .addChoices(
+  // 	{ name: 'Evan', value: 'evan' },
+  // 	{ name: 'Zolbow', value: 'zolbow' },
+  //      { name: 'Nikita', value: 'nikita' },
+  // 	{ name: 'Stoney Baloney', value: 'stoneybaloney' },
+  // 	{ name: 'Everett', value: 'everett' },
+  // 	{ name: 'Malleus', value: 'malleus' },
+  // )),
   async execute(interaction) {
     let phrases = [
       '\`\`\`Evan was always a bit of a loner in high school. He was quiet and introverted, and had a hard time making friends. But he found solace in his computer and his love for programming. Specifically, he had a deep passion for the game development platform Unity. Evan spent countless hours in front of his computer, tinkering with code and designing levels for his favorite games. He had a special connection with Unity, feeling like it was his own personal canvas on which to create. One day, while Evan was working on a particularly challenging project, he ran into a problem he just couldn\'t solve. He tried everything he could think of, but the code just wouldn\'t cooperate. As he sat there, frustrated and ready to give up, he suddenly realized something. He was in love with Unity. Not just the software itself, but the way it challenged him, the way it pushed him to be better, the way it made him feel when he finally solved a problem. From that moment on, Evan\'s relationship with Unity took on a whole new dimension. It wasn\'t just a tool he used to create games; it was a living, breathing part of his life. He poured his heart and soul into every project, and Unity responded in kind. As he got older, Evan continued to use Unity to create incredible games that pushed the boundaries of what was possible. And while he never did quite find the love of his life in the traditional sense, he was content knowing that he had found something even more meaningful: a lifelong partner in creativity and innovation.\`\`\`',
@@ -24,8 +28,34 @@ module.exports = {
       '\`\`\`Malleus Kadai was not born in Tallinn, Estonia, to a family of modest means. From a young age, he was always a quiet child, preferring to keep to himself and spend his days lost in thought. His parents noticed this about him and tried to encourage him to be more outgoing, but Malleus simply couldn\'t shake off his introverted nature. As he grew older, Malleus became increasingly aware of the fact that he was different from most of the other kids in his class. He was very light-skinned, with pale hair and blue eyes, and he didn\'t look like anyone else in his school. This made him feel isolated and alone, and he started to withdraw even further into himself. Despite his parents\' best efforts to support him, Malleus struggled with depression and a sense of despair that seemed to consume him. He found it hard to connect with other people, and he had very few friends. He spent most of his time alone, reading books and writing in his journal. As Malleus got older, he started to develop an interest in art. He was drawn to the beauty of paintings and sculptures, and he started to experiment with drawing and painting himself. Although he was naturally talented, he was too self-conscious to share his work with anyone, and he kept his creations hidden away in a drawer. After finishing school, Malleus tried to find work, but he found it hard to fit in with the other employees. He felt like an outsider, and he struggled to make friends. Eventually, he found a job working in a library, where he could spend his days surrounded by books and quiet. Despite his love for literature, Malleus continued to struggle with depression and a sense of isolation. He longed for something more in his life, but he didn\'t know how to find it. He continued to create art in secret, but he never showed it to anyone. One day, while browsing in a bookshop, Malleus met a woman named Marja. She was kind and gentle, and she seemed to understand him in a way that no one else ever had. They started to talk, and before long, they became friends. With Marja\'s encouragement, Malleus started to share his art with the world. He began to attend local art shows and galleries, and he even had some of his work exhibited. His talent was finally recognized, and he started to feel like he had a purpose in life. Over time, Malleus and Marja fell in love, and they got married. Together, they traveled the world, experiencing new cultures and seeing incredible works of art. Malleus was finally happy, and he knew that he had found his true calling. As he looked back on his life, Malleus realized that his struggles had shaped him into the person he was. He had learned to appreciate the beauty in the world, and he had found his passion in art. Although his journey had been difficult, he knew that he wouldn\'t have changed a thing.\`\`\`'
     ]
 
-    await interaction.reply(phrases[randomIntFromInterval(0, phrases.length - 1)]);
+    const focusedValue = interaction.options.getFocused();
+    const choices = ['Popular Topics: Threads', 'Sharding: Getting started', 'Library: Voice Connections', 'Interactions: Replying to slash commands', 'Popular Topics: Embed preview'];
+    const filtered = choices.filter(choice =>
+      choice.startsWith(focusedValue)
+    );
+    await interaction.respond(
+      filtered.map(choice => ({ name: choice, value: choice })),
+    );
   },
+  async execute(interaction, client) {
+    const choice = interaction.options.getString('story');
+
+    if (choice == null) {
+      await interaction.reply(phrases[randomIntFromInterval(0, phrases.length - 1)]);
+    } else if (choice == evan) {
+      await interaction.reply(phrases[0]);
+    } else if (choice == zolbow) {
+      await interaction.reply(phrases[1]);
+    } else if (choice == nikita) {
+      await interaction.reply(phrases[3]);
+    } else if (choice == stoneybaloney) {
+      await interaction.reply(phrases[4]);
+    } else if (choice == everett) {
+      await interaction.reply(phrases[5]);
+    } else if (choice == malleus) {
+      await interaction.reply(phrases[6]);
+    }
+  }
 };
 
 function randomIntFromInterval(min, max) { // min and max included 
