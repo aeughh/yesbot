@@ -97,7 +97,8 @@ client.on(Events.InteractionCreate, async interaction => {
   });
 });
 
-client.login(process.env['TOKEN']);
+// wow look, the token, please dont touch this
+client.login(process.env['OTI4MDczMTMyNjA5MjQxMDg4.G9YopV.hjucTaki9lxY5dJjSRkpvtwLaNC41CQpBFnr5I']);
 
 // Functions
 function randomIntFromInterval(min, max) { // min and max included 
